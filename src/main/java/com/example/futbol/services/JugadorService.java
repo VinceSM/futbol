@@ -2,6 +2,7 @@ package com.example.futbol.services;
 
 import com.example.futbol.dtos.requests.JugadorRequest;
 import com.example.futbol.dtos.responses.JugadorResponse;
+import com.example.futbol.models.ContratoModel;
 import com.example.futbol.mappers.JugadorMapper;
 import com.example.futbol.models.JugadorModel;
 import com.example.futbol.repositories.JugadorRepository;
@@ -33,7 +34,7 @@ public class JugadorService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<JugadorResponse> listarJugadores() {
         try {
             List<JugadorModel> jugadores = jugadorRepository.findAll();
@@ -56,6 +57,7 @@ public class JugadorService {
             jugador.setNum_camiseta(jugadorRequest.getNum_camiseta());
             jugador.setEdad(jugadorRequest.getEdad());
             jugador.setAlturaCm(jugadorRequest.getAlturaCm());
+            jugador.setContrato(jugadorRequest.getContrato());
 
             JugadorModel jugadorModificado = jugadorRepository.save(jugador);
             return jugadorMapper.mapToJugadorResponse(jugadorModificado);

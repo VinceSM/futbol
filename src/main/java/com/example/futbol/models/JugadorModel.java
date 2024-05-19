@@ -34,4 +34,10 @@ public class JugadorModel {
     @Column(name = "Altura")
     private Integer alturaCm;
 
+    @OneToOne
+    @JoinTable(name = "jugador-contrato", // Nombre de la tabla de unión
+            joinColumns = @JoinColumn(name = "jugador_id"), // Clave foránea que apunta a Equipo
+            inverseJoinColumns = @JoinColumn(name = "contrato_id")) // Clave foránea que apunta a Jugador
+    private ContratoModel contrato;
+
 }
