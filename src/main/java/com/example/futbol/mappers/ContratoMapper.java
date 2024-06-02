@@ -4,7 +4,9 @@ import com.example.futbol.dtos.requests.ContratoRequest;
 import com.example.futbol.dtos.responses.ContratoResponse;
 import com.example.futbol.models.ContratoModel;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Service
 @Component
 public class ContratoMapper {
     public ContratoModel mapToContratoModel(ContratoRequest contratoRequest) {

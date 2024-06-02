@@ -4,28 +4,20 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Entity
-@Table(name = "Estadios")
+@Table(name = "competiciones")
 @Data
 @Component
-public class EstadioModel {
+public class CompeticionModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
 
+    @Column(name = "Tipo")
+    private String tipo;
+
     @Column(name = "Nombre")
     private String nombre;
-
-    @Column(name = "Ubicacion")
-    private String ubicacion;
-
-    @Column(name = "Capacidad")
-    private Long capacidad;
-
-    @Column(name = "Terreno")
-    private String tipoDeTerreno;
 }

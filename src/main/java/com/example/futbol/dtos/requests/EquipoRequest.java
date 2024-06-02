@@ -1,7 +1,6 @@
 package com.example.futbol.dtos.requests;
 
 import com.example.futbol.models.EstadioModel;
-import com.example.futbol.models.JugadorModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +13,6 @@ public class EquipoRequest {
     private String nombreLiga;
     private String apodo;
     private EstadioModel estadio;
+    private String Posicion;
 
 }

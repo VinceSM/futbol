@@ -1,7 +1,6 @@
 package com.example.futbol.dtos.responses;
 
 import com.example.futbol.models.EstadioModel;
-import com.example.futbol.models.JugadorModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,4 +14,5 @@ public class EquipoResponse {
     private String nombreLiga;
     private String apodo;
     private EstadioModel estadio;
+    private String Posicion;
 }

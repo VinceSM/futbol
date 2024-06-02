@@ -4,7 +4,9 @@ import com.example.futbol.dtos.requests.EstadioRequest;
 import com.example.futbol.dtos.responses.EstadioResponse;
 import com.example.futbol.models.EstadioModel;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+@Service
 @Component
 public class EstadioMapper {
 

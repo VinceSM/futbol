@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Entity
 @Getter
 @Setter
@@ -22,8 +20,8 @@ public class EquipoModel {
     @Column(name = "Nombre")
     private String nombreEquipo;
 
-    @Column(name = "Liga")
-    private String nombreLiga;
+    @Column(name = "Posicion")
+    private String Posicion;
 
     @Column(name = "Apodo")
     private String apodo;
@@ -33,5 +31,8 @@ public class EquipoModel {
             joinColumns = @JoinColumn(name = "equipo_id"), // Clave foránea que apunta a Equipo
             inverseJoinColumns = @JoinColumn(name = "estadio_id")) // Clave foránea que apunta a Jugador
     private EstadioModel estadio;
+
+    @Column(name = "Liga")
+    private String nombreLiga;
 
 }
