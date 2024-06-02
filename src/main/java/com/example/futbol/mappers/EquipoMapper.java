@@ -15,7 +15,6 @@ public class EquipoMapper {
         EquipoModel equipo = new EquipoModel();
         equipo.setNombreLiga(equipoRequest.getNombreLiga());
         equipo.setApodo(equipoRequest.getApodo());
-        equipo.setJugador(equipoRequest.getJugador());
         equipo.setNombreEquipo(equipoRequest.getNombreEquipo());
         equipo.setEstadio(equipoRequest.getEstadio());
         return equipo;
@@ -27,7 +26,6 @@ public class EquipoMapper {
         equipoResponse.setNombreEquipo(equipo.getNombreEquipo());
         equipoResponse.setApodo(equipo.getApodo());
         equipoResponse.setNombreLiga(equipo.getNombreLiga());
-        equipoResponse.setJugador(equipo.getJugador());
         equipoResponse.setEstadio(equipo.getEstadio());
         return equipoResponse;
     }

@@ -1,6 +1,7 @@
 package com.example.futbol.dtos.responses;
 
 import com.example.futbol.models.ContratoModel;
+import com.example.futbol.models.EquipoModel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +15,6 @@ public class JugadorResponse {
     private Integer edad;
     private Integer alturaCm;
     private ContratoModel contrato;
+    private EquipoModel equipo;
 
 }

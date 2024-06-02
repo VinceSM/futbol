@@ -16,6 +16,7 @@ public class JugadorMapper {
         jugador.setEdad(jugadorRequest.getEdad());
         jugador.setAlturaCm(jugadorRequest.getAlturaCm());
         jugador.setContrato(jugadorRequest.getContrato());
+        jugador.setEquipo(jugadorRequest.getEquipo());
         return jugador;
     }
 
@@ -28,6 +29,7 @@ public class JugadorMapper {
         jugadorResponse.setEdad(nuevoJugador.getEdad());
         jugadorResponse.setAlturaCm(nuevoJugador.getAlturaCm());
         jugadorResponse.setContrato(nuevoJugador.getContrato());
+        jugadorResponse.setEquipo(nuevoJugador.getEquipo());
         return jugadorResponse;
     }
 

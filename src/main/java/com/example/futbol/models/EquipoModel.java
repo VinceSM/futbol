@@ -29,12 +29,6 @@ public class EquipoModel {
     private String apodo;
 
     @OneToOne
-    @JoinTable(name = "equipo_jugador", // Nombre de la tabla de unión
-            joinColumns = @JoinColumn(name = "equipo_id"), // Clave foránea que apunta a Equipo
-            inverseJoinColumns = @JoinColumn(name = "jugador_id")) // Clave foránea que apunta a Jugador
-    private JugadorModel jugador;
-
-    @OneToOne
     @JoinTable(name = "equipo_estadio", // Nombre de la tabla de unión
             joinColumns = @JoinColumn(name = "equipo_id"), // Clave foránea que apunta a Equipo
             inverseJoinColumns = @JoinColumn(name = "estadio_id")) // Clave foránea que apunta a Jugador

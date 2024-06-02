@@ -15,4 +15,5 @@ public class JugadorRequest {
     private Integer edad;
     private Integer alturaCm;
     private ContratoModel contrato;
+    private EquipoModel equipo;
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Data
 @Entity
 @Component
@@ -13,7 +15,18 @@ public class ContratoModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
-    private int duracion;
-    private double precioFichajeAnual;
+    @Column(name = "Descripcion")
+    private String descripcion;
+
+    @Column(name = "DuracionAnual")
+    private int duracionAnual;
+
+    @Column(name = "PrecioDelFichaje")
+    private double precioFichaje;
+
+    @Column(name = "FechaInicio")
+    private Date fechaInicio;
+
+    @Column(name = "FechaFin")
+    private Date fechaFin;
 }

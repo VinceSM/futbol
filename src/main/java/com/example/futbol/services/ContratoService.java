@@ -40,9 +40,11 @@ public class ContratoService {
         ContratoModel contrato = contratoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Contrato no encontrado con id: " + id));
 
-        contrato.setNombre(contratoRequest.getNombre());
-        contrato.setDuracion(contratoRequest.getDuracion());
-        contrato.setPrecioFichajeAnual(contratoRequest.getPrecioFichajeAnual());
+        contrato.setDescripcion(contratoRequest.getDescripcion());
+        contrato.setDuracionAnual(contratoRequest.getDuracionAnual());
+        contrato.setFechaInicio(contratoRequest.getFechaInicio());
+        contrato.setFechaFin(contratoRequest.getFechaFin());
+        contrato.setPrecioFichaje(contratoRequest.getPrecioFichaje());
 
         ContratoModel contratoModificado = contratoRepository.save(contrato);
         return contratoMapper.mapToContratoResponse(contratoModificado);

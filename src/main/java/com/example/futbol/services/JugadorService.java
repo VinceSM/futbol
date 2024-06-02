@@ -58,6 +58,7 @@ public class JugadorService {
             jugador.setEdad(jugadorRequest.getEdad());
             jugador.setAlturaCm(jugadorRequest.getAlturaCm());
             jugador.setContrato(jugadorRequest.getContrato());
+            jugador.setEquipo(jugadorRequest.getEquipo());
 
             JugadorModel jugadorModificado = jugadorRepository.save(jugador);
             return jugadorMapper.mapToJugadorResponse(jugadorModificado);

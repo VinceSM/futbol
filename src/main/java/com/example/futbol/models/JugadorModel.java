@@ -40,4 +40,11 @@ public class JugadorModel {
             inverseJoinColumns = @JoinColumn(name = "contrato_id")) // Clave foránea que apunta a Jugador
     private ContratoModel contrato;
 
+    @OneToOne
+    @JoinTable(name = "jugador-equipo",
+            joinColumns = @JoinColumn(name = "jugador_id"),
+            inverseJoinColumns = @JoinColumn(name = "equipo_id"))
+    private EquipoModel equipo;
+
+
 }

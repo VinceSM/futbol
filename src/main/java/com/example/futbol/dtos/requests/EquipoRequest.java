@@ -13,7 +13,6 @@ public class EquipoRequest {
     private String nombreEquipo;
     private String nombreLiga;
     private String apodo;
-    private JugadorModel jugador;
     private EstadioModel estadio;
 
 }

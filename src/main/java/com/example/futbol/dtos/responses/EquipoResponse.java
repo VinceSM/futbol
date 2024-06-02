@@ -14,6 +14,5 @@ public class EquipoResponse {
     private String nombreEquipo;
     private String nombreLiga;
     private String apodo;
-    private JugadorModel jugador;
     private EstadioModel estadio;
 }

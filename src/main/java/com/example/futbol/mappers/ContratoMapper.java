@@ -9,18 +9,22 @@ import org.springframework.stereotype.Component;
 public class ContratoMapper {
     public ContratoModel mapToContratoModel(ContratoRequest contratoRequest) {
         ContratoModel contrato = new ContratoModel();
-        contrato.setNombre(contratoRequest.getNombre());
-        contrato.setDuracion(contratoRequest.getDuracion());
-        contrato.setPrecioFichajeAnual(contratoRequest.getPrecioFichajeAnual());
+        contrato.setDescripcion(contratoRequest.getDescripcion());
+        contrato.setDuracionAnual(contratoRequest.getDuracionAnual());
+        contrato.setFechaInicio(contratoRequest.getFechaInicio());
+        contrato.setFechaFin(contratoRequest.getFechaFin());
+        contrato.setPrecioFichaje(contratoRequest.getPrecioFichaje());
         return contrato;
     }
 
     public ContratoResponse mapToContratoResponse(ContratoModel contrato) {
         ContratoResponse contratoResponse = new ContratoResponse();
         contratoResponse.setId(contrato.getId());
-        contratoResponse.setNombre(contrato.getNombre());
-        contratoResponse.setDuracion(contrato.getDuracion());
-        contratoResponse.setPrecioFichajeAnual(contrato.getPrecioFichajeAnual());
+        contratoResponse.setDescripcion(contrato.getDescripcion());
+        contratoResponse.setDuracionAnual(contrato.getDuracionAnual());
+        contratoResponse.setFechaInicio(contrato.getFechaInicio());
+        contratoResponse.setFechaFin(contrato.getFechaFin());
+        contratoResponse.setPrecioFichaje(contrato.getPrecioFichaje());
         return contratoResponse;
     }
 }

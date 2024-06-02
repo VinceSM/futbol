@@ -54,7 +54,6 @@ public class EquipoService {
             equipo.setNombreEquipo(equipoRequest.getNombreEquipo());
             equipo.setApodo(equipoRequest.getApodo());
             equipo.setNombreLiga(equipoRequest.getNombreLiga());
-            equipo.setJugador(equipoRequest.getJugador());
             equipo.setEstadio(equipoRequest.getEstadio());
 
             EquipoModel equipoModificado = equipoRepository.save(equipo);
