@@ -2,6 +2,7 @@ package com.example.futbol.tests;
 
 import com.example.futbol.dtos.requests.CompeticionRequest;
 import com.example.futbol.dtos.responses.CompeticionResponse;
+import com.example.futbol.mappers.CompeticionMapper;
 import com.example.futbol.models.CompeticionModel;
 import com.example.futbol.services.CompeticionService;
 import com.example.futbol.repositories.CompeticionRepository;
@@ -25,6 +26,9 @@ class CompeticionServiceTest {
 
     @Mock
     private CompeticionRepository competicionRepository;
+
+    @Mock
+    private CompeticionMapper competicionMapper;
 
     @InjectMocks
     private CompeticionService competicionService;
