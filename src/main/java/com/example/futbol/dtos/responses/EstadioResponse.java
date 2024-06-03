@@ -1,6 +1,5 @@
 package com.example.futbol.dtos.responses;
 
-import com.example.futbol.models.EquipoModel;
 import lombok.Data;
 
 @Data

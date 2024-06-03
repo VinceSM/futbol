@@ -12,11 +12,11 @@ public class EquipoMapper {
 
     public EquipoModel mapToEquipoModel(EquipoRequest equipoRequest) {
         EquipoModel equipo = new EquipoModel();
-        equipo.setNombreLiga(equipoRequest.getNombreLiga());
-        equipo.setApodo(equipoRequest.getApodo());
         equipo.setNombreEquipo(equipoRequest.getNombreEquipo());
+        equipo.setApodo(equipoRequest.getApodo());
         equipo.setEstadio(equipoRequest.getEstadio());
         equipo.setPosicion(equipoRequest.getPosicion());
+        equipo.setCompeticion(equipoRequest.getCompeticion());
         return equipo;
     }
 
@@ -25,9 +25,9 @@ public class EquipoMapper {
         equipoResponse.setId(equipo.getId());
         equipoResponse.setNombreEquipo(equipo.getNombreEquipo());
         equipoResponse.setApodo(equipo.getApodo());
-        equipoResponse.setNombreLiga(equipo.getNombreLiga());
         equipoResponse.setEstadio(equipo.getEstadio());
         equipoResponse.setPosicion(equipo.getPosicion());
+        equipoResponse.setCompeticion(equipo.getCompeticion());
         return equipoResponse;
     }
 }

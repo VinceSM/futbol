@@ -1,7 +1,5 @@
 package com.example.futbol.dtos.responses;
 
-
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.util.Date;

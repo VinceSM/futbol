@@ -1,9 +1,9 @@
 package com.example.futbol.models;
 
-import org.springframework.stereotype.Component;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 @Entity
 @Getter
@@ -21,18 +21,20 @@ public class EquipoModel {
     private String nombreEquipo;
 
     @Column(name = "Posicion")
-    private String Posicion;
+    private String posicion;
 
     @Column(name = "Apodo")
     private String apodo;
 
     @OneToOne
-    @JoinTable(name = "equipo_estadio", // Nombre de la tabla de unión
-            joinColumns = @JoinColumn(name = "equipo_id"), // Clave foránea que apunta a Equipo
-            inverseJoinColumns = @JoinColumn(name = "estadio_id")) // Clave foránea que apunta a Jugador
+    @JoinTable(name = "equipo_estadio",
+            joinColumns = @JoinColumn(name = "equipo_id"),
+            inverseJoinColumns = @JoinColumn(name = "estadio_id"))
     private EstadioModel estadio;
 
-    @Column(name = "Liga")
-    private String nombreLiga;
-
+    @OneToOne
+    @JoinTable(name = "equipo_competicion",
+            joinColumns = @JoinColumn(name = "equipo_id"),
+            inverseJoinColumns = @JoinColumn(name = "competicion_id"))
+    private CompeticionModel competicion;
 }
