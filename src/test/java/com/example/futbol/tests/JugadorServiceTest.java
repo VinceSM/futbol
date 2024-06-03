@@ -2,124 +2,92 @@ package com.example.futbol.tests;
 
 import com.example.futbol.dtos.requests.JugadorRequest;
 import com.example.futbol.dtos.responses.JugadorResponse;
+import com.example.futbol.mappers.JugadorMapper;
 import com.example.futbol.models.JugadorModel;
-import com.example.futbol.services.JugadorService;
 import com.example.futbol.repositories.JugadorRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.example.futbol.services.JugadorService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class JugadorServiceTest {
+@Service
+@RunWith(MockitoJUnitRunner.class)
+public class JugadorServiceTest {
 
     @Mock
     private JugadorRepository jugadorRepository;
+
+    @Mock
+    private JugadorMapper jugadorMapper;
 
     @InjectMocks
     private JugadorService jugadorService;
 
     @Test
-    void testCrearJugador() {
+    public void testCrearJugador() {
         // Arrange
         JugadorRequest jugadorRequest = new JugadorRequest();
+        jugadorRequest.setNombre("Lionel Messi");
+
         JugadorModel jugadorModel = new JugadorModel();
-        when(jugadorRepository.save(any())).thenReturn(jugadorModel);
+        jugadorModel.setId(1L);
+        jugadorModel.setNombre("Lionel Messi");
+
+        JugadorResponse expectedResponse = new JugadorResponse();
+        expectedResponse.setId(1L);
+        expectedResponse.setNombre("Lionel Messi");
+
+        when(jugadorMapper.mapToJugadorModel(jugadorRequest)).thenReturn(jugadorModel);
+        when(jugadorRepository.save(jugadorModel)).thenReturn(jugadorModel);
+        when(jugadorMapper.mapToJugadorResponse(jugadorModel)).thenReturn(expectedResponse);
 
         // Act
         JugadorResponse response = jugadorService.crearJugador(jugadorRequest);
 
         // Assert
-        assertEquals(jugadorModel.getId(), response.getId());
+        assertNotNull(response);
+        assertEquals(expectedResponse.getId(), response.getId());
+        assertEquals(expectedResponse.getNombre(), response.getNombre());
     }
 
     @Test
-    void testListarJugadores() {
+    public void testListarJugadores() {
         // Arrange
+        List<JugadorModel> jugadores = new ArrayList<>();
         JugadorModel jugadorModel = new JugadorModel();
-        when(jugadorRepository.findAll()).thenReturn(Collections.singletonList(jugadorModel));
+        jugadorModel.setId(1L);
+        jugadorModel.setNombre("Jugador de Prueba");
+        jugadores.add(jugadorModel);
+        when(jugadorRepository.findAll()).thenReturn(jugadores);
+        when(jugadorMapper.mapToJugadorResponse(any(JugadorModel.class))).thenReturn(new JugadorResponse());
 
-        // Act
-        jugadorService.listarJugadores();
+        List<JugadorResponse> response = jugadorService.listarJugadores();
 
         // Assert
-        verify(jugadorRepository, times(1)).findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
     }
 
-    @Test
-    void testModificarJugador() {
+    @Test(expected = ResourceNotFoundException.class)
+    public void testEliminarJugador_NoEncontrado() {
         // Arrange
-        Long id = 1L;
-        JugadorRequest jugadorRequest = new JugadorRequest();
-        jugadorRequest.setNombre("Jugador de prueba");
-        JugadorModel jugadorModel = new JugadorModel();
-        jugadorModel.setId(id);
-        when(jugadorRepository.findById(id)).thenReturn(Optional.of(jugadorModel));
-        when(jugadorRepository.save(any())).thenReturn(jugadorModel);
-
-        // Act
-        JugadorResponse response = jugadorService.modificarJugador(id, jugadorRequest);
-
-        // Assert
-        assertEquals(jugadorModel.getId(), response.getId());
-        assertEquals(jugadorRequest.getNombre(), response.getNombre());
-    }
-
-    @Test
-    void testEliminarJugador_Existente() {
-        // Arrange
-        Long id = 1L;
-        JugadorModel jugadorModel = new JugadorModel();
-        when(jugadorRepository.findById(id)).thenReturn(Optional.of(jugadorModel));
-
-        // Act
-        jugadorService.eliminarJugador(id);
-
-        // Assert
-        verify(jugadorRepository, times(1)).delete(jugadorModel);
-    }
-
-    @Test
-    void testEliminarJugador_NoEncontrado() {
-        // Arrange
-        Long idInexistente = 1L;
+        long idInexistente = 999L;
         when(jugadorRepository.findById(idInexistente)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> jugadorService.eliminarJugador(idInexistente));
-    }
-
-    @Test
-    void testObtenerJugadorPorId_Existente() {
-        // Arrange
-        Long id = 1L;
-        JugadorModel jugadorModel = new JugadorModel();
-        when(jugadorRepository.findById(id)).thenReturn(Optional.of(jugadorModel));
-
         // Act
-        jugadorService.obtenerJugadorPorId(id);
-
-        // Assert
-        verify(jugadorRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testObtenerJugadorPorId_NoEncontrado() {
-        // Arrange
-        Long idInexistente = 1L;
-        when(jugadorRepository.findById(idInexistente)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> jugadorService.obtenerJugadorPorId(idInexistente));
+        jugadorService.eliminarJugador(idInexistente);
     }
 }

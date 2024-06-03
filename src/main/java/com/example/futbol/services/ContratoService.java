@@ -6,6 +6,7 @@ import com.example.futbol.mappers.ContratoMapper;
 import com.example.futbol.models.ContratoModel;
 import com.example.futbol.repositories.ContratoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +53,9 @@ public class ContratoService {
 
     @Transactional
     public void eliminarContrato(Long id) {
-        contratoRepository.deleteById(id);
+        ContratoModel contrato = contratoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Contrato no encontrado con id: " + id));
+        contratoRepository.delete(contrato);
     }
 
     @Transactional

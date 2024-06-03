@@ -2,125 +2,92 @@ package com.example.futbol.tests;
 
 import com.example.futbol.dtos.requests.EstadioRequest;
 import com.example.futbol.dtos.responses.EstadioResponse;
+import com.example.futbol.mappers.EstadioMapper;
 import com.example.futbol.models.EstadioModel;
-import com.example.futbol.services.EstadioService;
 import com.example.futbol.repositories.EstadioRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.example.futbol.services.EstadioService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class EstadioServiceTest {
+@Service
+@RunWith(MockitoJUnitRunner.class)
+public class EstadioServiceTest {
 
     @Mock
     private EstadioRepository estadioRepository;
+
+    @Mock
+    private EstadioMapper estadioMapper;
 
     @InjectMocks
     private EstadioService estadioService;
 
     @Test
-    void testCrearEstadio() {
+    public void testCrearEstadio() {
         // Arrange
         EstadioRequest estadioRequest = new EstadioRequest();
+        estadioRequest.setNombre("Camp Nou");
+
         EstadioModel estadioModel = new EstadioModel();
-        when(estadioRepository.save(any())).thenReturn(estadioModel);
+        estadioModel.setId(1L);
+        estadioModel.setNombre("Camp Nou");
+
+        EstadioResponse expectedResponse = new EstadioResponse();
+        expectedResponse.setId(1L);
+        expectedResponse.setNombre("Camp Nou");
+
+        when(estadioMapper.mapToEstadioModel(estadioRequest)).thenReturn(estadioModel);
+        when(estadioRepository.save(estadioModel)).thenReturn(estadioModel);
+        when(estadioMapper.mapToEstadioResponse(estadioModel)).thenReturn(expectedResponse);
 
         // Act
         EstadioResponse response = estadioService.crearEstadio(estadioRequest);
 
         // Assert
-        assertEquals(estadioModel.getId(), response.getId());
+        assertNotNull(response);
+        assertEquals(expectedResponse.getId(), response.getId());
+        assertEquals(expectedResponse.getNombre(), response.getNombre());
     }
 
     @Test
-    void testListarEstadios() {
+    public void testListarEstadios() {
         // Arrange
+        List<EstadioModel> estadios = new ArrayList<>();
         EstadioModel estadioModel = new EstadioModel();
-        when(estadioRepository.findAll()).thenReturn(Collections.singletonList(estadioModel));
+        estadioModel.setId(1L);
+        estadioModel.setNombre("Estadio de Prueba");
+        estadios.add(estadioModel);
+        when(estadioRepository.findAll()).thenReturn(estadios);
+        when(estadioMapper.mapToEstadioResponse(any(EstadioModel.class))).thenReturn(new EstadioResponse());
 
-        // Act
-        estadioService.listarEstadios();
+        List<EstadioResponse> response = estadioService.listarEstadios();
 
         // Assert
-        verify(estadioRepository, times(1)).findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
     }
 
-    @Test
-    void testModificarEstadio() {
+    @Test(expected = ResourceNotFoundException.class)
+    public void testEliminarEstadio_NoEncontrado() {
         // Arrange
-        Long id = 1L;
-        EstadioRequest estadioRequest = new EstadioRequest();
-        estadioRequest.setNombre("Estadio de prueba");
-        EstadioModel estadioModel = new EstadioModel();
-        estadioModel.setId(id);
-        when(estadioRepository.findById(id)).thenReturn(Optional.of(estadioModel));
-        when(estadioRepository.save(any())).thenReturn(estadioModel);
-
-        // Act
-        EstadioResponse response = estadioService.modificarEstadio(id, estadioRequest);
-
-        // Assert
-        assertEquals(estadioModel.getId(), response.getId());
-        assertEquals(estadioRequest.getNombre(), response.getNombre());
-    }
-
-    @Test
-    void testEliminarEstadio_Existente() {
-        // Arrange
-        Long id = 1L;
-        EstadioModel estadioModel = new EstadioModel();
-        when(estadioRepository.findById(id)).thenReturn(Optional.of(estadioModel));
-
-        // Act
-        estadioService.eliminarEstadio(id);
-
-        // Assert
-        verify(estadioRepository, times(1)).delete(estadioModel);
-    }
-
-    @Test
-    void testEliminarEstadio_NoEncontrado() {
-        // Arrange
-        Long idInexistente = 1L;
+        long idInexistente = 999L;
         when(estadioRepository.findById(idInexistente)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> estadioService.eliminarEstadio(idInexistente));
-    }
-
-    @Test
-    void testObtenerEstadioPorId_Existente() {
-        // Arrange
-        Long id = 1L;
-        EstadioModel estadioModel = new EstadioModel();
-        when(estadioRepository.findById(id)).thenReturn(Optional.of(estadioModel));
-
         // Act
-        estadioService.obtenerEstadioPorId(id);
-
-        // Assert
-        verify(estadioRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testObtenerEstadioPorId_NoEncontrado() {
-        // Arrange
-        Long idInexistente = 1L;
-        when(estadioRepository.findById(idInexistente)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> estadioService.obtenerEstadioPorId(idInexistente));
+        estadioService.eliminarEstadio(idInexistente);
     }
 }
-

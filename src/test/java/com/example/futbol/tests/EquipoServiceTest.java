@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -19,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@Service
 @RunWith(MockitoJUnitRunner.class)
 public class EquipoServiceTest {
 
@@ -31,25 +34,40 @@ public class EquipoServiceTest {
     @InjectMocks
     private EquipoService equipoService;
 
+    @Mock
+    private EquipoRequest equipoRequest;
+
     @Test
     public void testCrearEquipo() {
         // Arrange
-        EquipoRequest request = new EquipoRequest();
-        request.setNombreEquipo("Equipo de Prueba");
+        EquipoRequest equipoRequest = new EquipoRequest();
+        equipoRequest.setNombreEquipo("FC Barcelona");
+        equipoRequest.setApodo("Los Culés");
+
         EquipoModel equipoModel = new EquipoModel();
         equipoModel.setId(1L);
-        equipoModel.setNombreEquipo("Equipo de Prueba");
-        when(equipoMapper.mapToEquipoModel(request)).thenReturn(equipoModel);
-        when(equipoRepository.save(any(EquipoModel.class))).thenReturn(equipoModel);
+        equipoModel.setNombreEquipo("FC Barcelona");
+        equipoModel.setApodo("Los Culés");
+
+        EquipoResponse expectedResponse = new EquipoResponse();
+        expectedResponse.setId(1L);
+        expectedResponse.setNombreEquipo("FC Barcelona");
+        expectedResponse.setApodo("Los Culés");
+
+        when(equipoMapper.mapToEquipoModel(equipoRequest)).thenReturn(equipoModel);
+        when(equipoRepository.save(equipoModel)).thenReturn(equipoModel);
+        when(equipoMapper.mapToEquipoResponse(equipoModel)).thenReturn(expectedResponse);
 
         // Act
-        EquipoResponse response = equipoService.crearEquipo(request);
+        EquipoResponse response = equipoService.crearEquipo(equipoRequest);
 
         // Assert
         assertNotNull(response);
-        assertEquals(1L, (long) response.getId());
-        assertEquals("Equipo de Prueba", response.getNombreEquipo());
+        assertEquals(expectedResponse.getId(), response.getId());
+        assertEquals(expectedResponse.getNombreEquipo(), response.getNombreEquipo());
+        assertEquals(expectedResponse.getApodo(), response.getApodo());
     }
+
 
     @Test
     public void testListarEquipos() {

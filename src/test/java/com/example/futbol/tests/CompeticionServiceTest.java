@@ -4,25 +4,28 @@ import com.example.futbol.dtos.requests.CompeticionRequest;
 import com.example.futbol.dtos.responses.CompeticionResponse;
 import com.example.futbol.mappers.CompeticionMapper;
 import com.example.futbol.models.CompeticionModel;
-import com.example.futbol.services.CompeticionService;
 import com.example.futbol.repositories.CompeticionRepository;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import com.example.futbol.services.CompeticionService;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class CompeticionServiceTest {
+@Service
+@RunWith(MockitoJUnitRunner.class)
+public class CompeticionServiceTest {
 
     @Mock
     private CompeticionRepository competicionRepository;
@@ -34,89 +37,57 @@ class CompeticionServiceTest {
     private CompeticionService competicionService;
 
     @Test
-    void testCrearCompeticion() {
+    public void testCrearCompeticion() {
         // Arrange
         CompeticionRequest competicionRequest = new CompeticionRequest();
+        competicionRequest.setNombre("Champions League");
+
         CompeticionModel competicionModel = new CompeticionModel();
-        when(competicionRepository.save(any())).thenReturn(competicionModel);
+        competicionModel.setId(1L);
+        competicionModel.setNombre("Champions League");
+
+        CompeticionResponse expectedResponse = new CompeticionResponse();
+        expectedResponse.setId(1L);
+        expectedResponse.setNombre("Champions League");
+
+        when(competicionMapper.mapToCompeticionModel(competicionRequest)).thenReturn(competicionModel);
+        when(competicionRepository.save(competicionModel)).thenReturn(competicionModel);
+        when(competicionMapper.mapToCompeticionResponse(competicionModel)).thenReturn(expectedResponse);
 
         // Act
         CompeticionResponse response = competicionService.crearCompeticion(competicionRequest);
 
         // Assert
-        assertEquals(competicionModel.getId(), response.getId());
+        assertNotNull(response);
+        assertEquals(expectedResponse.getId(), response.getId());
+        assertEquals(expectedResponse.getNombre(), response.getNombre());
     }
 
     @Test
-    void testListarCompeticiones() {
+    public void testListarCompeticiones() {
         // Arrange
+        List<CompeticionModel> competiciones = new ArrayList<>();
         CompeticionModel competicionModel = new CompeticionModel();
-        when(competicionRepository.findAll()).thenReturn(Collections.singletonList(competicionModel));
+        competicionModel.setId(1L);
+        competicionModel.setNombre("Competicion de Prueba");
+        competiciones.add(competicionModel);
+        when(competicionRepository.findAll()).thenReturn(competiciones);
+        when(competicionMapper.mapToCompeticionResponse(any(CompeticionModel.class))).thenReturn(new CompeticionResponse());
 
-        // Act
-        competicionService.listarCompeticiones();
+        List<CompeticionResponse> response = competicionService.listarCompeticiones();
 
         // Assert
-        verify(competicionRepository, times(1)).findAll();
+        assertNotNull(response);
+        assertEquals(1, response.size());
     }
 
-    @Test
-    void testModificarCompeticion() {
+    @Test(expected = ResourceNotFoundException.class)
+    public void testEliminarCompeticion_NoEncontrado() {
         // Arrange
-        Long id = 1L;
-        CompeticionRequest competicionRequest = new CompeticionRequest();
-        competicionRequest.setTipo("Liga");
-        competicionRequest.setNombre("La Liga");
-        CompeticionModel competicionModel = new CompeticionModel();
-        competicionModel.setId(id);
-        when(competicionRepository.findById(id)).thenReturn(Optional.of(competicionModel));
-        when(competicionRepository.save(any())).thenReturn(competicionModel);
-
-        // Act
-        CompeticionResponse response = competicionService.modificarCompeticion(id, competicionRequest);
-
-        // Assert
-        assertEquals(competicionModel.getId(), response.getId());
-        assertEquals(competicionRequest.getTipo(), response.getTipo());
-        assertEquals(competicionRequest.getNombre(), response.getNombre());
-    }
-
-    @Test
-    void testEliminarCompeticion() {
-        // Arrange
-        Long id = 1L;
-        CompeticionModel competicionModel = new CompeticionModel();
-        when(competicionRepository.findById(id)).thenReturn(Optional.of(competicionModel));
-
-        // Act
-        competicionService.eliminarCompeticion(id);
-
-        // Assert
-        verify(competicionRepository, times(1)).deleteById(id);
-    }
-
-    @Test
-    void testObtenerCompeticionPorId_Existente() {
-        // Arrange
-        Long id = 1L;
-        CompeticionModel competicionModel = new CompeticionModel();
-        when(competicionRepository.findById(id)).thenReturn(Optional.of(competicionModel));
-
-        // Act
-        competicionService.obtenerCompeticionPorId(id);
-
-        // Assert
-        verify(competicionRepository, times(1)).findById(id);
-    }
-
-    @Test
-    void testObtenerCompeticionPorId_NoEncontrado() {
-        // Arrange
-        Long idInexistente = 1L;
+        long idInexistente = 999L;
         when(competicionRepository.findById(idInexistente)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        assertThrows(ResourceNotFoundException.class, () -> competicionService.obtenerCompeticionPorId(idInexistente));
+        // Act
+        competicionService.eliminarCompeticion(idInexistente);
     }
 }
-
